@@ -5,7 +5,7 @@
 - 画像認識で撮影した画像のものが何か名前を調べられるiOSアプリ
 
 # 利用した主な技術・サービス
-- TensorFlow
+- TensorFlow  
 ニューラルネットワークを用いた機械学習ライブラリ  
 今回は学習済みモデル利用  
 Region-based Convolutional Neural Networkで検出する  

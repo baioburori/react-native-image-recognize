@@ -8,7 +8,7 @@
 - TensorFlow
 ニューラルネットワークを用いた機械学習ライブラリ  
 今回は学習済みモデル利用  
-Regional Convolutional Neural Networkで検出する  
+Region-based Convolutional Neural Networkで検出する  
 画像全体で畳み込みの処理すると計算コストかかるので物体があるところを判定して物体のある領域だけ処理して検出する
 
 - React Native  

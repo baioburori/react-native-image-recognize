@@ -3,8 +3,16 @@
 
 # 構築手順
 ## 画像認識APIコンテナ
-- ビルド
+- コンテナビルド
+```
+cd [react-native-image-recognize/image_recognize_apiまでのパス]
+docker build -t image_recognize .
+```
+
 - 起動
+```
+docker run -d -it -p 18998:80 -v [react-native-image-recognize/image_recognize_api/tensorflow-object-detection-example/object_detection_app/までのパス]:/opt/object_detection_app --name ir image_recognize
+```
 
 ## expoコンテナ
 - ビルド
@@ -17,7 +25,7 @@
 - 画像認識アプリ起動
 
 # 利用した主な技術・サービス
+- TensorFlow
 - docker
 - React Native
 - expo
-- 画像認識

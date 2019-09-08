@@ -12,7 +12,8 @@
 - expo実行（アプリビルド）
 
 ## iosアプリ
-- iPadにexpoクライアントアプリインストール
+- iPadに[expoクライアントアプリ](https://apps.apple.com/jp/app/expo-client/id982107779)をインストール
+
 - 画像認識アプリ起動
 
 # 利用した主な技術・サービス

@@ -4,6 +4,22 @@
 # なにができる？
 - 撮影した画像が何か画像認識で調べられるiOSアプリ
 
+# 利用した主な技術・サービス
+- TensorFlow
+学習済みモデル利用
+
+- React Native  
+ネイティブに描画されるiOSとAndroidのアプリを作ることができるFacebookのJavaScriptフレームワーク
+
+- expo  
+React Nativeによるアプリ開発支援サービス  
+React Nativeのプロジェクト作成・ビルド・デプロイを容易にするCLIや、React Native上での認証等のロジック・カメラビューなどのUIコンポーネントの実装を簡単にしてくれるSDKなどを提供する  
+expoアプリを通じて開発したアプリを実機デバッグできる
+
+- docker  
+コンテナ型の仮想環境をつくれる  
+今回は画像認識API環境とexpo CLIでアプリをデプロイできる環境つくるために利用
+
 # 構築手順
 ## 画像認識APIコンテナ
 - コンテナビルド
@@ -41,18 +57,3 @@ expo start --tunnel
 - 画像認識アプリ起動
 
 expo://[expoコンテナのIPアドレス or ホスト名]:19000
-
-# 利用した主な技術・サービス
-- TensorFlow
-
-- React Native  
-ネイティブに描画されるiOSとAndroidのアプリを作ることができるFacebookのJavaScriptフレームワーク
-
-- expo  
-React Nativeによるアプリ開発支援サービス  
-React Nativeのプロジェクト作成・ビルド・デプロイを容易にするCLIや、React Native上での認証等のロジック・カメラビューなどのUIコンポーネントの実装を簡単にしてくれるSDKなどを提供する  
-expoアプリを通じて開発したアプリを実機デバッグできる
-
-- docker  
-コンテナ型の仮想環境をつくれる  
-今回は画像認識API環境とexpo CLIでアプリをデプロイできる環境つくるために利用

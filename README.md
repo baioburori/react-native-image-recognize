@@ -36,6 +36,7 @@ expo start --tunnel
 - iPadに[expoクライアントアプリ](https://apps.apple.com/jp/app/expo-client/id982107779)をインストール
 
 - 画像認識アプリ起動
+
 expo://[expoコンテナのIPアドレス or ホスト名]:19000
 
 # 利用した主な技術・サービス

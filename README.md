@@ -41,6 +41,17 @@ expo://[expoコンテナのIPアドレス or ホスト名]:19000
 
 # 利用した主な技術・サービス
 - TensorFlow
+
 - docker
+
 - React Native
+
+ネイティブに描画されるiOSとAndroidのアプリを作ることができるFacebookのJavaScriptフレームワーク
+
 - expo
+
+React Nativeによるアプリ開発支援サービス
+
+React Nativeのプロジェクト作成・ビルド・デプロイを容易にするCLIや、React Native上での認証等のロジック・カメラビューなどのUIコンポーネントの実装を簡単にしてくれるSDKなどを提供する
+
+expoアプリを通じて開発したアプリを実機デバッグできる

@@ -9,20 +9,34 @@ cd [react-native-image-recognize/image_recognize_apiまでのパス]
 docker build -t image_recognize .
 ```
 
-- 起動
+- コンテナ起動
 ```
 docker run -d -it -p 18998:80 -v [react-native-image-recognize/image_recognize_api/tensorflow-object-detection-example/object_detection_app/までのパス]:/opt/object_detection_app --name ir image_recognize
 ```
 
 ## expoコンテナ
-- ビルド
-- 起動
+- コンテナビルド
+```
+cd [react-native-image-recognize/react_nativeまでのパス]
+docker build -t react_native .
+```
+
+- コンテナ起動
+```
+docker run -d  -it -v [react-native-image-recognize/react_native/srcまでのパス]:/rn -p 19000:19000 -p 19001:19001 -p 19002:19002 --name rn react_native
+```
+
 - expo実行（アプリビルド）
+```
+expo start --tunnel
+```
+※--tunnelは外部からアクセス可能にするオプション
 
 ## iosアプリ
 - iPadに[expoクライアントアプリ](https://apps.apple.com/jp/app/expo-client/id982107779)をインストール
 
 - 画像認識アプリ起動
+expo://[expoコンテナのIPアドレス or ホスト名]:19000
 
 # 利用した主な技術・サービス
 - TensorFlow

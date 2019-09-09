@@ -162,11 +162,11 @@ def detect_objects_no_data(image_path):
     draw_bounding_box_on_image(new_images[cls], boxes[i],
                                thickness=int(scores[i]*10)-4)
 
-  result = {}
+  result = []
 
   for cls, new_image in new_images.iteritems():
     category = client.category_index[cls]['name']
-    result[category] = 'ok'
+    result.append(category)
 
   return result
 

@@ -42,9 +42,7 @@ RUN ln -sf /opt/graph_def/faster_rcnn_resnet101_coco_11_06_2017/frozen_inference
 WORKDIR /opt
 RUN git clone https://github.com/GoogleCloudPlatform/tensorflow-object-detection-example
 RUN cp -a tensorflow-object-detection-example/object_detection_app /opt/
-#CMD ["/usr/bin/python","--version"]
-ENTRYPOINT ["/opt/object_detection_app/app.py"]
-#CMD ["/opt/object_detection_app/app.py"]
+ENTRYPOINT ["/usr/bin/python","/opt/object_detection_app/app.py"]
 
 RUN mkdir -p /tmp/uploaded
 ENV UPLOAD_DIR_PATH /tmp/uploaded

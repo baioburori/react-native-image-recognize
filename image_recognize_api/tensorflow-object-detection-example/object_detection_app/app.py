@@ -59,7 +59,7 @@ def before_request():
 
 PATH_TO_CKPT = '/opt/graph_def/frozen_inference_graph.pb'
 PATH_TO_LABELS = MODEL_BASE + '/object_detection/data/mscoco_label_map.pbtxt'
-RESULT_SCORE_THRESHOLD = 0.5
+RESULT_SCORE_THRESHOLD = 0.5 # 結果として返すスコアの閾値
 
 content_types = {'jpg': 'image/jpeg',
                  'jpeg': 'image/jpeg',
@@ -148,30 +148,6 @@ def encode_image(image):
       base64.b64encode(image_buffer.getvalue()))
   return imgstr
 
-
-def detect_objects(image_path):
-  image = Image.open(image_path).convert('RGB')
-  boxes, scores, classes, num_detections = client.detect(image)
-  image.thumbnail((480, 480), Image.ANTIALIAS)
-
-  new_images = {}
-  for i in range(num_detections):
-    if scores[i] < RESULT_SCORE_THRESHOLD: continue
-    cls = classes[i]
-    if cls not in new_images.keys():
-      new_images[cls] = image.copy()
-    draw_bounding_box_on_image(new_images[cls], boxes[i],
-                               thickness=int(scores[i]*10)-4)
-
-  result = {}
-  result['original'] = encode_image(image.copy())
-
-  for cls, new_image in new_images.iteritems():
-    category = client.category_index[cls]['name']
-    result[category] = encode_image(new_image)
-
-  return result
-
 def detect_objects_no_data(image_path):
   image = Image.open(image_path).convert('RGB')
   boxes, scores, classes, num_detections = client.detect(image)
@@ -187,91 +163,22 @@ def detect_objects_no_data(image_path):
                                thickness=int(scores[i]*10)-4)
 
   result = {}
-  #result['original'] = encode_image(image.copy())
 
   for cls, new_image in new_images.iteritems():
     category = client.category_index[cls]['name']
     result[category] = 'ok'
-    #result[category] = encode_image(new_image)
 
   return result
-
-# ★ポイント1
-# limit upload file size : 1MB
-app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024
-
-# ★ポイント2
-# ex) set UPLOAD_DIR_PATH=/tmp/uploaded
-UPLOAD_DIR = os.getenv("UPLOAD_DIR_PATH")
-
-# rest api : request.files with multipart/form-data
-# <form action="/data/upload" method="post" enctype="multipart/form-data">
-#   <input type="file" name="uploadFile"/>
-#   <input type="submit" value="submit"/>
-# </form>
-@app.route('/data/upload', methods=['POST'])
-def upload_multipart():
-    # ★ポイント3
-    if 'uploadFile' not in request.files:
-        return make_response(jsonify({'result':'uploadFile is required.'}),400)
-
-    file = request.files['uploadFile']
-    fileName = file.filename
-    if '' == fileName:
-        return make_response(jsonify({'result':'filename must not empty.'}),404)
-
-    # ★ポイント4
-    saveFileName = datetime.now().strftime("%Y%m%d_%H%M%S_") \
-        + werkzeug.utils.secure_filename(fileName)
-    file.save(os.path.join(UPLOAD_DIR, saveFileName))
-    return make_response(jsonify({'result':'upload OK.'}),200)
-
-# ★ポイント5
-@app.errorhandler(werkzeug.exceptions.RequestEntityTooLarge)
-def handle_over_max_file_size(error):
-    print("werkzeug.exceptions.RequestEntityTooLarge")
-    return 'result : file size is overed.'
-
-@app.route('/test')
-def test():
-  print('test')
-  return 'test route'
-
-@app.route('/')
-def upload():
-  photo_form = PhotoForm(request.form)
-  return render_template('upload.html', photo_form=photo_form, result={})
-
 
 @app.route('/post_api', methods=['POST'])
 def postApi():
     with tempfile.NamedTemporaryFile() as temp:
       request.files.get('input_photo').save(temp)
       temp.flush()
-
-# detect_objectのoriginal返さない、数値も入ってる版つくる
+      
       result = detect_objects_no_data(temp.name)
 
-    #return result
     return make_response(jsonify(result),200)
-
-@app.route('/post', methods=['GET', 'POST'])
-def post():
-  form = PhotoForm(CombinedMultiDict((request.files, request.form)))
-  if request.method == 'POST' and form.validate():
-    with tempfile.NamedTemporaryFile() as temp:
-      #form.input_photo.data.save(temp)
-      request.files.get('input_photo').save(temp)
-      temp.flush()
-      result = detect_objects(temp.name)
-
-    photo_form = PhotoForm(request.form)
-    print(result.keys())
-    return render_template('upload.html',
-                           photo_form=photo_form, result=result)
-  else:
-    return redirect(url_for('upload'))
-
 
 client = ObjectDetector()
 

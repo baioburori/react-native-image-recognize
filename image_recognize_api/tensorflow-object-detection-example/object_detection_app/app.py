@@ -59,6 +59,7 @@ def before_request():
 
 PATH_TO_CKPT = '/opt/graph_def/frozen_inference_graph.pb'
 PATH_TO_LABELS = MODEL_BASE + '/object_detection/data/mscoco_label_map.pbtxt'
+RESULT_SCORE_THRESHOLD = 0.5
 
 content_types = {'jpg': 'image/jpeg',
                  'jpeg': 'image/jpeg',
@@ -155,7 +156,7 @@ def detect_objects(image_path):
 
   new_images = {}
   for i in range(num_detections):
-    if scores[i] < 0.7: continue
+    if scores[i] < RESULT_SCORE_THRESHOLD: continue
     cls = classes[i]
     if cls not in new_images.keys():
       new_images[cls] = image.copy()
@@ -178,7 +179,7 @@ def detect_objects_no_data(image_path):
 
   new_images = {}
   for i in range(num_detections):
-    if scores[i] < 0.7: continue
+    if scores[i] < RESULT_SCORE_THRESHOLD: continue
     cls = classes[i]
     if cls not in new_images.keys():
       new_images[cls] = image.copy()
@@ -194,6 +195,7 @@ def detect_objects_no_data(image_path):
     #result[category] = encode_image(new_image)
 
   return result
+
 # ★ポイント1
 # limit upload file size : 1MB
 app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024

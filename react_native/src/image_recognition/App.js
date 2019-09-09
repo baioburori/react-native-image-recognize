@@ -42,9 +42,9 @@ export default class App extends React.Component {
         };
 
     fetch(API_URL, options).then((response) => {
-      return response.text();
-    },).then((text) => {
-      this.setState({result_text: text});
+      return response.json();
+    },).then((jsonData) => {
+      this.setState({result_text: ','.join(jsonData)});
     }).catch(() => {
       this.setState({result_text: 'Failed to request'});
     });
@@ -101,8 +101,6 @@ export default class App extends React.Component {
             allowsEditing: true,
             aspect: [16, 9]
         });
-
-        console.log(result);
 
         if (!result.cancelled) {
             this.setState({

@@ -13,7 +13,7 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      result_text: '', //ここに好きな場所を指定。
+      result_text: 'No Result', //ここに好きな場所を指定。
       image: null,
       base64: ''
     };
@@ -23,7 +23,7 @@ export default class App extends React.Component {
   getWhatImageIs() {
     let { base64 } = this.state;
 
-    this.setState({result_text: 'requesting'});
+    this.setState({result_text: 'Waiting for response'});
     const params = new FormData();
     params.append('input_photo', {
       base64,
@@ -46,7 +46,7 @@ export default class App extends React.Component {
     },).then((text) => {
       this.setState({result_text: text});
     }).catch(() => {
-      this.setState({result_text: 'failed to request'});
+      this.setState({result_text: 'Failed to request'});
     });
 
   }
@@ -58,20 +58,21 @@ export default class App extends React.Component {
 
     return (
       <View style={styles.container}>
-      <Text>{this.state.result_text}</Text>
-      <Text>{this.state.lat}</Text>
-        <Text>{this.state.lng}</Text>
         <Button
-          title='send'
-          onPress={this.getWhatImageIs}
-        />
-
-        <Button
-          title="Pick an image from camera roll"
+          title="Take a photo"
           onPress={this._takePhoto}
         />
         {image &&
           <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+        <Button
+          title='Image recognize'
+          onPress={this.getWhatImageIs}
+        />
+      
+      <Text>{this.state.result_text}</Text>
+        
+
+        
       </View>
     );
   }
@@ -117,9 +118,10 @@ export default class App extends React.Component {
 
   getPermissionAsync = async () => {
     if (Constants.platform.ios) {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA);
-      if (status !== 'granted') {
-        alert('Sorry, we need camera roll permissions to make this work!');
+      const { statusCamera } = await Permissions.askAsync(Permissions.CAMERA);
+      const { statusCameraRoll } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (statusCamera !== 'granted' || statusCameraRoll !== 'granted') {
+        alert('Sorry, we need permissions to make this work!');
       }
     }
   }

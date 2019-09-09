@@ -44,7 +44,7 @@ export default class App extends React.Component {
     fetch(API_URL, options).then((response) => {
       return response.json();
     },).then((jsonData) => {
-      this.setState({result_text: ','.join(jsonData)});
+      this.setState({result_text: jsonData.join()});
     }).catch(() => {
       this.setState({result_text: 'Failed to request'});
     });
@@ -68,11 +68,11 @@ export default class App extends React.Component {
           title='Image recognize'
           onPress={this.getWhatImageIs}
         />
-      
-      <Text>{this.state.result_text}</Text>
-        
 
-        
+      <Text>{this.state.result_text}</Text>
+
+
+
       </View>
     );
   }
@@ -83,8 +83,6 @@ export default class App extends React.Component {
             base64: true,
               allowsEditing: false
           });
-
-          console.log(result);
 
           if (!result.cancelled) {
             this.setState({
@@ -117,8 +115,9 @@ export default class App extends React.Component {
   getPermissionAsync = async () => {
     if (Constants.platform.ios) {
       const { statusCamera } = await Permissions.askAsync(Permissions.CAMERA);
-      const { statusCameraRoll } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      if (statusCamera !== 'granted' || statusCameraRoll !== 'granted') {
+      // const { statusCameraRoll } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (statusCamera !== 'granted') {
+      // if (statusCamera !== 'granted' || statusCameraRoll !== 'granted') {
         alert('Sorry, we need permissions to make this work!');
       }
     }
